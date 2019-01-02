@@ -1,0 +1,16 @@
+{
+  "name": "jsdoc-materialize",
+  "version": "1.0.0",
+  "description": "",
+  "main": "publish.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsdoc": "^3.5.5",
+    "taffydb": "^2.7.3",
+    "util": "^0.11.1"
+  }
+}
