@@ -3,8 +3,6 @@
 // Note my file, copied from https://github.com/braintree/jsdoc-template, will redo it later
 'use strict';
 
-const NAV_UL_CLASSES = "sidenav";
-
 var doop = require('jsdoc/util/doop');
 var fs = require('jsdoc/fs');
 var helper = require('jsdoc/util/templateHelper');
@@ -310,8 +308,15 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         itemsNav += '</li>';
       } else if (!hasOwnProp.call(itemsSeen, item.longname)) {
         // replace '/' in url to match ID in some section
-        itemsNav += '<li id="' + item.name.replace('/', '_') + '-nav">' + linktoFn(item.longname, item.name.replace(/^module:/, ''));
-        if (methods.length && false) { // <..>
+        itemsNav += '<li id="' + item.name.replace('/', '_') + '-nav">';
+        itemsNav += `<ul class="collapsible collapsible-accordion"><li>`;
+        if (methods.length) { // <..>
+          itemsNav += `<a class="collapsible-header">`;
+          itemsNav += `<i class="material-icons if-unactive">arrow_drop_down</i>`;
+          itemsNav += `<i class="material-icons if-active">arrow_drop_up</i>`
+          itemsNav += `</a>`;
+          itemsNav += linktoFn(item.longname, item.name.replace(/^module:/, ''));
+          itemsNav += `<div class="collapsible-body">`;
           itemsNav += "<ul class='methods'>";
 
           methods.forEach(function(method) {
@@ -321,6 +326,8 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
           });
 
           itemsNav += '</ul>';
+          itemsNav += `</div>`;
+          itemsNav += `</li></ul>`;
         }
         itemsNav += '</li>';
         itemsSeen[item.longname] = true;
@@ -328,7 +335,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
     });
 
     if (itemsNav !== '') {
-      nav += '<h3>' + itemHeading + `</h3><ul class="${NAV_UL_CLASSES}">` + itemsNav + '</ul>';
+      nav += `<li><h3>Classes</h3></li>${itemsNav}`;
     }
   }
 

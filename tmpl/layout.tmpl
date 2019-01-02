@@ -13,23 +13,25 @@ env.conf.materialize);
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-okaidia.min.css" />
     <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   </head>
   <body class="blue-grey darken-4">
-    <?js if (materializeConf.header) { ?>
-      <header>
-        <?js= materializeConf.header ?>
-      </header>
-    <?js } ?>
-    <div class="section">
+    <header>
       <nav class="blue-grey darken-3">
-        <?js= this.nav ?>
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <?js if (materializeConf.header) { ?>
+          <?js= materializeConf.header ?>
+        <?js } ?>
       </nav>
-    </div>
-    <div id="main">
+    </header>
+    <ul id="slide-out" class="sidenav sidenav-fixed">
+      <?js= this.nav ?>
+    </ul>
+    <main>
       <?js if (title != "Home") { ?>
-        <h1 class="page-title">
+        <h1 class="page-title center white-text light">
           <?js= title ?>
         </h1>
       <?js } ?>
