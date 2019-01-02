@@ -1,0 +1,10 @@
+<dl>
+  <?js obj.forEach((o) => { ?>
+    <dt><?js= this.linkto(o.longname, o.name) ?></dt>
+    <dd>
+      <?js if (o.summary) { ?>
+        <?js= o.summary ?>
+      <?js } ?>
+    </dd>
+  <?js }); ?>
+</dl>

@@ -1,22 +1,139 @@
 <?js
 let conf = env.conf;
 let isGlobalPage;
+
+let excludePattern = new RegExp(conf.source.excludePattern);
+
 docs.forEach((doc, i) => {
+  let classes = this.find({kind: "class", memberof: doc.longname});
+  let mixins = this.find({kind: "mixin", memberof: doc.longname});
+  let namespaces = this.find({kind: "namespace", memberof: doc.longname});
+
   isGlobalPage = isGlobalPage || doc.kind === "globalObj";
 
+  looseSearch = (kind) => {
+    return this.find({kind, memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
+  }
+
+  let members = looseSearch("member");
+  members = members.filter((m) =>
+    m.longname
+    && !~m.longname.indexOf("module:")
+    && (!conf.source.excludePattern || !p.comment.match(excludePattern))
+  );
+
+  let methods = looseSearch("function");
 
   if (doc.kind === "mainpage" || doc.kind === "package") { ?>
     <?js= this.partial("mainpage.tmpl", doc) ?>
   <?js } else if (doc.kind === "source") { ?>
     <?js= this.partial("source.tmpl", doc) ?>
   <?js } else { ?>
-    <section>
-      <article>
-        <div class="container-overview container">
-          TODO
-        </div>
-      </article>
-    </section>
+    <div class="container white-text">
+      <section>
+        <article>
+          <div class="container-overview">
+            <?js if (doc.ancestors && doc.ancestors.length) { ?>
+              <div class="ancestors">
+                <?js= doc.ancestors.join(` <i class="material-icons">arrow_right</i> `) ?>
+              </div>
+            <?js } ?>
+            <?js if (doc.kind === "module") { ?>
+              <?js if (doc.description) { ?>
+                <div class="description">
+                  <?js= doc.description ?>
+                </div>
+              <?js } ?>
+
+              <?js if (doc.modules && doc.modules.length) { ?>
+                <ul class="modules">
+                  <?js doc.modules.forEach((module) => { ?>
+                    <li><?js= this.partial("method.tmpl", module) ?></li>
+                  <?js }); ?>
+                </ul>
+              <?js } ?>
+            <?js } else if (doc.kind === "class") { ?>
+              <?js= this.partial("method.tmpl", doc) ?>
+            <?js } else { ?>
+              <?js if (doc.description) { ?>
+                <div class="description">
+                  <?js= doc.description ?>
+                </div>
+              <?js } ?>
+
+              <?js= this.partial("details.tmpl", doc) ?>
+
+              <?js if (doc.examples && doc.examples.length) { ?>
+                <h3>Example<?js= doc.examples.length ? "s" : "" ?></h3>
+                <?js= this.partial("examples.tmpl", doc.examples) ?>
+              <?js } ?>
+            <?js } ?>
+
+          </div>
+          <div class="container-body">
+            <!-- Extends -->
+            <?js if (doc.augments && doc.augments.length) { ?>
+              <h3>Extends</h3>
+              <?js= self.partial("augments.tmpl", doc) ?>
+            <?js } ?>
+
+            <!-- Requirements -->
+            <?js if (doc.requires && doc.requires.length) { ?>
+              <h3>Requires</h3>
+              <ul>
+                <?js doc.requires.forEach((req) => { ?>
+                  <li>
+                    <?js= this.linkto(req, req) ?>
+                  </li>
+                <?js }); ?>
+              </ul>
+            <?js } ?>
+
+            <!-- Member classes -->
+            <?js if (!isGlobalPage && classes && classes.length) { ?>
+              <h3>Classes</h3>
+              <?js= this.partial("detailedlist.tmpl", classes) ?>
+            <?js } ?>
+
+            <!-- Mixins -->
+            <?js if (!isGlobalPage && mixins && mixins.length) { ?>
+              <h3>Mixins</h3>
+              <?js= this.partial("detailedlist.tmpl", mixins) ?>
+            <?js } ?>
+
+            <!-- Namespaces -->
+            <?js if (!isGlobalPage && namespaces && namespaces.length) { ?>
+              <h3>Namespaces</h3>
+              <?js= this.partial("detailedlist.tmpl", namespaces) ?>
+            <?js } ?>
+
+            <!-- Members -->
+            <?js if (isGlobalPage && members && members.length) { ?>
+              <h3>Members</h3>
+              <ul class="members">
+                <?js members.forEach((m) => { ?>
+                  <li>
+                    <?js= self.partial("members.tmpl", m) ?>
+                  </li>
+                <?js }); ?>
+              </ul>
+            <?js } ?>
+
+            <!-- Methods -->
+            <?js if (methods && methods.length) { ?>
+              <h3>Methods</h3>
+              <ul class="methods">
+                <?js methods.forEach(m => { ?>
+                  <li>
+                    <?js= this.partial("method.tmpl", m) ?>
+                  </li>
+                <?js }); ?>
+              </ul>
+            <?js } ?>
+          </div>
+        </article>
+      </section>
+    </div>
   <?js
   }
 });

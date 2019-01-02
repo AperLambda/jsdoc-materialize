@@ -21,6 +21,9 @@ var data, view;
 
 var outdir = path.normalize(env.opts.destination);
 
+let header = env.conf.materialize.header ? fs.readFileSync(env.conf.materialize.header, "utf8") : '';
+let footer = env.conf.materialize.footer ? fs.readFileSync(env.conf.materialize.footer, "utf8") : '';
+
 function find(spec) {
   return helper.find(data, spec);
 }
@@ -216,7 +219,9 @@ function generate(type, title, docs, filename, resolveLinks) {
   var docData = {
     type: type,
     title: title,
-    docs: docs
+    docs: docs,
+    header,
+    footer
   };
 
   var outpath = path.join(outdir, filename);
@@ -334,8 +339,12 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
       }
     });
 
+    if (env.conf.materialize.name) {
+      nav += `<li><a href="index.html"><h3 class="grey-text text-darken-1">${env.conf.materialize.name || "Documentation"}</h3></a></li>`;
+    }
+
     if (itemsNav !== '') {
-      nav += `<li><h3>Classes</h3></li>${itemsNav}`;
+      nav += `<li class="grey-text text-darken-2"><h4>Classes</h4></li>${itemsNav}`;
     }
   }
 
@@ -591,6 +600,8 @@ exports.publish = function(taffyData, opts, tutorials) {
   view.tutoriallink = tutoriallink;
   view.htmlsafe = htmlsafe;
   view.outputSourceFiles = outputSourceFiles;
+  view.header = header;
+  view.footer = footer;
 
   // once for all
   view.nav = buildNav(members);

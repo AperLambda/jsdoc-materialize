@@ -1,0 +1,7 @@
+<?js
+
+let properties = obj.properties;
+if (properties && properties.length) { ?>
+  <h5>Properties:</h5>
+  <?js= this.partial("properties.tmpl", obj) ?>
+<?js } ?>

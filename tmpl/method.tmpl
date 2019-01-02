@@ -1,0 +1,79 @@
+<?js
+
+let signature = obj.signature
+  .replace(/\(nullable\)/g, `<span class="nullable-signature">nullable</span>`)
+  .replace(/(?:\.\.\.|\u2026|&hellip;)([\w_\d]+)/g, `<span class="rest-signature">&hellip;$1</span>`);
+
+if (obj.kind !== "module") {
+  if (obj.kind === "class" && classdesc) { ?>
+    <h2>Constructor</h2>
+  <?js } ?>
+  <h4 class="light" id="<?js= id ?>">
+    <?js= obj.attribs + (obj.kind === "class" ? "new " : "") + name + (signature || "") ?>
+  </h4>
+  <?js
+
+  if (obj.summary) { ?>
+    <p class="summary">
+      <?js= summary ?>
+    </p>
+  <?js }
+}
+if (obj.kind !== "module" && obj.description) { ?>
+  <div class="description">
+    <?js= obj.description ?>
+  </div>
+<?js } ?>
+
+<?js if (obj.augments && obj.alias && !obj.alias.indexOf("module")) { ?>
+  <h5>Extends:</h5>
+  <?js= this.partial("augments.tmpl", obj) ?>
+<?js } ?>
+
+<?js if (obj.this) { ?>
+  <h5>This: <?= this.linkto(obj.this, obj.this) ?></h5>
+<?js } ?>
+
+<?js if (obj.params && obj.params.length) { ?>
+  <h5>Parameters:</h5>
+  <?js= this.partial("params.tmpl", obj.params) ?>
+<?js } ?>
+
+<?js= this.partial("details.tmpl", obj) ?>
+
+<?js if (obj.kind !== "module" && obj.requires && obj.requires.length) { ?>
+  <h5>Requires:</h5>
+  <?js= this.partial("linklist.tmpl", obj.requires) ?>
+<?js } ?>
+
+<?js if (obj.fires && obj.fires.length) { ?>
+  <h5>Fires:</h5>
+  <?js= this.partial("linklist.tmpl", obj.fires) ?>
+<?js } ?>
+
+<?js if (obj.listeners && obj.listeners.length) { ?>
+  <h5>Listeners:</h5>
+  <?js= this.partial("linklist.tmpl", obj.listeners) ?>
+<?js } ?>
+
+<?js if (obj.exceptions && obj.exceptions.length) { ?>
+  <h5>Throws:</h5>
+  <?js if (obj.exceptions.length > 1) { ?>
+    <ul>
+      <?js obj.exceptions.forEach((e) => { ?>
+        <li>
+          <?js= this.partial("exception.tmpl", e) ?>
+        </li>
+      <?js }); ?>
+    </ul>
+  <?js } else { ?>
+    <?js= this.partial("exception.tmpl", obj.exceptions[0]) ?>
+  <?js } ?>
+<?js } ?>
+
+<?js if (obj.examples && obj.examples.length) { ?>
+  <div class="example-container">
+    <h5 id="<?js= obj.name ?>-examples">Example<?js examples.length > 1 ? "s" : "" ?></h5>
+    <?js= this.partial("examples.tmpl", examples) ?>
+  </div>
+<?js } ?>
