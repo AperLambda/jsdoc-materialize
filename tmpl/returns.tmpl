@@ -1,0 +1,45 @@
+<?js
+let types = obj.reduce((acc, act) => act.type || acc, 0);
+?>
+<table>
+  <tbody>
+    <?js obj.forEach((r, i) => { ?>
+      <tr class="<?js= r.type || r.description ? 'no-bottom-line' : '' ?>">
+        <?js if (r.name || r.nullable) { ?>
+          <td class="return-name">
+            <?js if (r.variable) { ?>
+              <span class="rest-signature">&hellip;</span>
+            <?js }?>
+            <?js= r.name ?>
+            <span class="return-attributes">
+              <?js if (r.optional) { ?>
+                <span class="optional-signature">opt</span>
+              <?js } ?>
+              <?js if (r.nullable) { ?>
+                <span class="optional-signature">nullable</span>
+              <?js } ?>
+            </span>
+          </td>
+        <?js } ?>
+      </tr>
+      <?js if (r.description) { ?>
+        <tr class="<?js= r.type ? 'no-bottom-line' : '' ?>">
+          <td class="return-description second-color">
+            <?js= r.description ?>
+          </td>
+        </tr>
+      <?js } ?>
+      <?js if (r.type) { ?>
+        <tr>
+          <td>
+            <div class="return-types second-color">
+              <?js r.type.names.forEach((n) => { ?>
+                <div>{<?js= this.linkto(n, n) ?>}</div>
+              <?js }); ?>
+            </ul>
+          </td>
+        </tr>
+      <?js } ?>
+    <?js }); ?>
+  </tbody>
+</table>

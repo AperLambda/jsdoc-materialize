@@ -1,12 +1,16 @@
 <ul class="examples">
   <?js obj.forEach((example) => { ?>
     <li>
+      <div class="container">
       <?js if (example.caption) { ?>
-        <p class="code-caption">
+        <h6 class="code-caption">
           <?js= example.caption ?>
-        </p>
+        </h6>
       <?js } ?>
-      <pre class="prettyprint"><code class="language-js"><?js= this.htmlsafe(example.code) ?></code></pre>
+        <pre class="prettyprint">
+          <code class="language-js"><?js= this.htmlsafe(example.code) ?></code>
+        </pre>
+      </div>
     </li>
   <?js }); ?>
 </ul>

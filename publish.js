@@ -317,16 +317,16 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         itemsNav += `<ul class="collapsible collapsible-accordion"><li>`;
         if (methods.length) { // <..>
           itemsNav += `<a class="collapsible-header">`;
-          itemsNav += `<i class="material-icons if-unactive">arrow_drop_down</i>`;
-          itemsNav += `<i class="material-icons if-active">arrow_drop_up</i>`
+          itemsNav += `<i class="material-icons if-unactive white-text">arrow_drop_down</i>`;
+          itemsNav += `<i class="material-icons if-active white-text">arrow_drop_up</i>`
           itemsNav += `</a>`;
-          itemsNav += linktoFn(item.longname, item.name.replace(/^module:/, ''));
+          itemsNav += linktoFn(item.longname, `<span class="white-text">${item.name.replace(/^module:/, '')}</span>`);
           itemsNav += `<div class="collapsible-body">`;
-          itemsNav += "<ul class='methods'>";
+          itemsNav += "<ul class='methods sidenav-alternate-bg'>";
 
           methods.forEach(function(method) {
             itemsNav += '<li data-type="method" id="' + item.name.replace('/', '_') + '-' + method.name + '-nav">';
-            itemsNav += linkto(method.longname, method.name);
+            itemsNav += linkto(method.longname, `<span class="white-text text-darken-1">${method.name}</span>`);
             itemsNav += '</li>';
           });
 
@@ -340,11 +340,11 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
     });
 
     if (env.conf.materialize.name) {
-      nav += `<li><a href="index.html"><h3 class="grey-text text-darken-1">${env.conf.materialize.name || "Documentation"}</h3></a></li>`;
+      nav += `<li><a href="index.html"><h3 class="grey-text">${env.conf.materialize.name || "Documentation"}</h3></a></li>`;
     }
 
     if (itemsNav !== '') {
-      nav += `<li class="grey-text text-darken-2"><h4>Classes</h4></li>${itemsNav}`;
+      nav += `<li class="grey-text text-lighten-1"><h4>Classes</h4></li>${itemsNav}`;
     }
   }
 

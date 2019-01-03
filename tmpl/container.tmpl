@@ -29,24 +29,24 @@ docs.forEach((doc, i) => {
   <?js } else if (doc.kind === "source") { ?>
     <?js= this.partial("source.tmpl", doc) ?>
   <?js } else { ?>
-    <div class="container white-text">
+    <div class="white-text">
       <section>
         <article>
           <div class="container-overview">
             <?js if (doc.ancestors && doc.ancestors.length) { ?>
-              <div class="ancestors">
+              <div class="ancestors container">
                 <?js= doc.ancestors.join(` <i class="material-icons">arrow_right</i> `) ?>
               </div>
             <?js } ?>
             <?js if (doc.kind === "module") { ?>
               <?js if (doc.description) { ?>
-                <div class="description">
+                <div class="description container">
                   <?js= doc.description ?>
                 </div>
               <?js } ?>
 
               <?js if (doc.modules && doc.modules.length) { ?>
-                <ul class="modules">
+                <ul class="modules container">
                   <?js doc.modules.forEach((module) => { ?>
                     <li><?js= this.partial("method.tmpl", module) ?></li>
                   <?js }); ?>
@@ -56,7 +56,7 @@ docs.forEach((doc, i) => {
               <?js= this.partial("method.tmpl", doc) ?>
             <?js } else { ?>
               <?js if (doc.description) { ?>
-                <div class="description">
+                <div class="description container">
                   <?js= doc.description ?>
                 </div>
               <?js } ?>
@@ -71,48 +71,50 @@ docs.forEach((doc, i) => {
 
           </div>
           <div class="container-body">
-            <!-- Extends -->
-            <?js if (doc.augments && doc.augments.length) { ?>
-              <h3>Extends</h3>
-              <?js= self.partial("augments.tmpl", doc) ?>
-            <?js } ?>
+            <div class="container">
+              <!-- Extends -->
+              <?js if (doc.augments && doc.augments.length) { ?>
+                <h3>Extends</h3>
+                <?js= self.partial("augments.tmpl", doc) ?>
+              <?js } ?>
 
-            <!-- Requirements -->
-            <?js if (doc.requires && doc.requires.length) { ?>
-              <h3>Requires</h3>
-              <ul>
-                <?js doc.requires.forEach((req) => { ?>
-                  <li>
-                    <?js= this.linkto(req, req) ?>
-                  </li>
-                <?js }); ?>
-              </ul>
-            <?js } ?>
+              <!-- Requirements -->
+              <?js if (doc.requires && doc.requires.length) { ?>
+                <h3>Requires</h3>
+                <ul>
+                  <?js doc.requires.forEach((req) => { ?>
+                    <li>
+                      <?js= this.linkto(req, req) ?>
+                    </li>
+                  <?js }); ?>
+                </ul>
+              <?js } ?>
 
-            <!-- Member classes -->
-            <?js if (!isGlobalPage && classes && classes.length) { ?>
-              <h3>Classes</h3>
-              <?js= this.partial("detailedlist.tmpl", classes) ?>
-            <?js } ?>
+              <!-- Member classes -->
+              <?js if (!isGlobalPage && classes && classes.length) { ?>
+                <h3>Classes</h3>
+                <?js= this.partial("detailedlist.tmpl", classes) ?>
+              <?js } ?>
 
-            <!-- Mixins -->
-            <?js if (!isGlobalPage && mixins && mixins.length) { ?>
-              <h3>Mixins</h3>
-              <?js= this.partial("detailedlist.tmpl", mixins) ?>
-            <?js } ?>
+              <!-- Mixins -->
+              <?js if (!isGlobalPage && mixins && mixins.length) { ?>
+                <h3>Mixins</h3>
+                <?js= this.partial("detailedlist.tmpl", mixins) ?>
+              <?js } ?>
 
-            <!-- Namespaces -->
-            <?js if (!isGlobalPage && namespaces && namespaces.length) { ?>
-              <h3>Namespaces</h3>
-              <?js= this.partial("detailedlist.tmpl", namespaces) ?>
-            <?js } ?>
+              <!-- Namespaces -->
+              <?js if (!isGlobalPage && namespaces && namespaces.length) { ?>
+                <h3>Namespaces</h3>
+                <?js= this.partial("detailedlist.tmpl", namespaces) ?>
+              <?js } ?>
+            </div>
 
             <!-- Members -->
             <?js if (isGlobalPage && members && members.length) { ?>
-              <h3>Members</h3>
+              <h3 class="padding-left">Members</h3>
               <ul class="members">
-                <?js members.forEach((m) => { ?>
-                  <li>
+                <?js members.forEach((m, i) => { ?>
+                  <li class="<?js= i%2 ? '' : 'blue-grey darken-4plus'?>">
                     <?js= self.partial("members.tmpl", m) ?>
                   </li>
                 <?js }); ?>
@@ -121,11 +123,13 @@ docs.forEach((doc, i) => {
 
             <!-- Methods -->
             <?js if (methods && methods.length) { ?>
-              <h3>Methods</h3>
+              <h3 class="padding-left">Methods</h3>
               <ul class="methods">
-                <?js methods.forEach(m => { ?>
-                  <li>
-                    <?js= this.partial("method.tmpl", m) ?>
+                <?js methods.forEach((m, i) => { ?>
+                  <li class="<?js= i%2 ? '' : 'main-alternate-bg'?>">
+                    <div class="method-container">
+                      <?js= this.partial("method.tmpl", m) ?>
+                    </div>
                   </li>
                 <?js }); ?>
               </ul>

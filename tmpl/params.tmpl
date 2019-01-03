@@ -1,1 +1,93 @@
-TODO: params.tmpl
+<?js
+// build a param tree
+
+let params = [];
+
+let types = false, defaults = false;
+
+for (let i = 0; i < obj.length; i++) {
+  let param = obj[i];
+  if (param.type) types = true;
+  // console.log(param.type);
+  if (typeof param.defaultvalue != "undefined") defaults = true;
+  let parent = params.find((p) =>
+    new RegExp(`^(?:${p.name}(?:\\[\\])*)\\.(.+)$`).test(param.name)
+  );
+  if (parent) {
+    parent.sub = param;
+    continue;
+  }
+  params.push(param);
+}
+
+let colspan = 1 + defaults;
+
+?>
+
+<table>
+  <tbody>
+    <?js params.forEach((param) => {
+      if (!param) return;
+    ?>
+      <tr class="<?js= param.description || param.sub || param.type ? 'no-bottom-line' : '' ?>">
+        <td class="param-name">
+          <?js if (param.variable) { ?>
+            <span class="rest-signature">&hellip;</span>
+          <?js }?>
+          <?js= param.name ?>
+          <span class="param-attributes">
+            <?js if (param.optional) { ?>
+              <span class="optional-signature">opt</span>
+            <?js } ?>
+            <?js if (param.nullable) { ?>
+              <span class="optional-signature">nullable</span>
+            <?js } ?>
+          </span>
+        </td>
+        <?js if (defaults) { ?>
+          <td class="param-default">
+            <?js if (typeof param.defaultvalue != "undefined") { ?>
+              <span class="param-default-label light second-color">=</span>
+              <span class="param-default-value"><?js= param.defaultvalue?></span>
+            <?js } ?>
+          </td>
+        <?js } ?>
+      </tr>
+
+      <?js if (param.sub) { // subparams ?>
+        <tr class="<?js= param.desription || param.type ? 'no-bottom-line' : '' ?>" colspan="<?js= colspan ?>">
+          <td>
+            <ul>
+              <?js params.sub.forEach(sub => { ?>
+                <li>
+                  <span class="param-name"><i class="material-icons">subdirectory_arrow_right</i> <?js= sub.name ?></span>
+                </li>
+              <?js }); ?>
+            </ul>
+          </td>
+        </tr>
+      <?js } ?>
+
+      <?js if (param.description) { ?>
+        <tr class="<?js= param.type ? 'no-bottom-line' : '' ?>">
+          <td class="param-description second-color" colspan="<?js= colspan ?>">
+            <?js= param.description ?>
+          </td>
+        </tr>
+      <?js } ?>
+
+      <?js if (param.type) { ?>
+        <tr>
+          <td colspan="<?js= colspan ?>">
+            <div class="param-types second-color">
+              <?js param.type.names.forEach((n) => { ?>
+                <div>{<?js= this.linkto(n, n) ?>}</div>
+              <?js }); ?>
+            </div>
+          </td>
+        </tr>
+      <?js } ?>
+
+    <?js }); ?>
+  </tbody>
+</table>

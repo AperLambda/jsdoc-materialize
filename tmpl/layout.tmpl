@@ -1,3 +1,7 @@
+<?js
+let cfg = env.conf.materialize;
+?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -17,24 +21,85 @@
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Custom coloring & stuff -->
+    <style>
+
+:root {
+  --second-color: <?js= cfg.secondColor || "#a0a0a0" ?>;
+}
+
+.main-bg {
+  background: <?js= cfg.mainBG || "#263238" ?>;
+}
+
+.main-alternate-bg {
+  background: <?js= cfg.mainBGAlt || cfg.mainBG || "#212c31" ?>;
+}
+
+.nav-bg {
+  background: <?js= cfg.navBG || "#37474f" ?>;
+}
+
+.sidenav-bg {
+  background: <?js= cfg.sidenavBG || "#2a383e" ?>;
+}
+
+.sidenav-alternate-bg {
+  background: <?js= cfg.sidenavBGAlt || cfg.sidenavBG || "#37474f" ?>;
+}
+
+.main-color {
+  color: <?js= cfg.mainColor || "white" ?>;
+}
+
+.nav-color {
+  color: <?js= cfg.navColor || "white" ?>;
+}
+
+.sidenav-title-color {
+  color: <?js= cfg.sidenavTitleColor || "#9e9e9e" ?>;
+}
+
+.sidenav-title-alternate-color {
+  color: <?js= cfg.sidenavTitleColorAlt || "#bdbdbd" ?>;
+}
+
+.sidenav-color {
+  color: <?js= cfg.sidenavColor || "white" ?>;
+}
+
+.sidenav-alternate-color {
+  color: <?js= cfg.sidenavColorAlt || cfg.sidenavColor || "white" ?>;
+}
+
+.title-color {
+  color: <?js= cfg.titleColor || cfg.mainColor || "white" ?>;
+}
+
+.second-color {
+  color: var(--second-color);
+}
+
+    </style>
   </head>
-  <body class="blue-grey darken-4">
+  <body class="main-bg">
     <header>
-      <nav class="blue-grey darken-3">
+      <nav class="nav-bg">
         <div class="nav-wrapper">
-          <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons nav-color">menu</i></a>
           <?js if (this.header) { ?>
             <?js= this.header ?>
           <?js } ?>
         </div>
       </nav>
     </header>
-    <ul id="slide-out" class="sidenav sidenav-fixed">
+    <ul id="slide-out" class="sidenav sidenav-fixed sidenav-bg">
       <?js= this.nav ?>
     </ul>
     <main>
       <?js if (title != "Home") { ?>
-        <h1 class="page-title center white-text light">
+        <h1 class="page-title center title-color light">
           <?js= title ?>
         </h1>
       <?js } ?>
@@ -48,8 +113,8 @@
 
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-		<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
-		<script>M.AutoInit();</script>
+    <?= cfg.fontAwesomeJS ? `<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>` : '' ?>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js" defer></script>
+    <script defer>M.AutoInit();</script>
   </body>
 </html>
